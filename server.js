@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const dns = require("dns");
@@ -20,13 +22,15 @@ connectDB();
    MIDDLEWARE
 ====================== */
 
-// CORS configuration
+// CORS setup
 const corsOptions = {
   origin: "https://superkneewebsite.vercel.app", // your frontend URL
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true, // if you need cookies or auth headers
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 };
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // handle preflight requests
 
 app.use(express.json());
 
@@ -37,9 +41,6 @@ app.use(express.json());
 // Auth routes
 app.use("/api/auth", authRoutes);
 
-// Dashboard routes
-app.use("/api/dashboard", dashboardRoutes);
-
 // Test route
 app.get("/", (req, res) => {
   res.send("API Running...");
@@ -48,6 +49,8 @@ app.get("/", (req, res) => {
 /* ======================
    SERVER
 ====================== */
+
+app.use("/api/dashboard", dashboardRoutes);
 
 const PORT = process.env.PORT || 5000;
 
