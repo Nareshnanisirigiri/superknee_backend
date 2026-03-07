@@ -3,7 +3,7 @@ const crypto = require("crypto");
 const Order = require("../models/Order");
 const User = require("../models/User"); // Added User import
 const { sendEmail } = require("../utils/emailUtils");
-const { orderConfirmationTemplate } = require("../utils/emailTemplates");
+const { orderConfirmationTemplate } = require("../utils/emailOrder");
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_placeholder",
@@ -72,8 +72,8 @@ exports.createRazorpayOrder = async (req, res) => {
     });
   } catch (error) {
     console.error("Create Order Error:", error);
-    res.status(500).json({ 
-      message: "Server error creating order", 
+    res.status(500).json({
+      message: "Server error creating order",
       error: error.message
     });
   }

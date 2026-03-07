@@ -1,5 +1,5 @@
 const { sendEmail } = require("../utils/emailUtils");
-const { welcomeTemplate } = require("../utils/emailTemplates");
+const { welcomeTemplate } = require("../utils/emailOrder");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
