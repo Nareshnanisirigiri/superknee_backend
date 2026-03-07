@@ -1,3 +1,5 @@
+const { sendEmail } = require("../utils/emailUtils");
+const { welcomeTemplate } = require("../utils/emailTemplates");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -30,6 +32,14 @@ exports.registerUser = async (req, res) => {
       password: hashedPassword,
       role
     });
+
+    // Send Welcome Email
+    try {
+      const emailHtml = welcomeTemplate(user.name);
+      await sendEmail(user.email, "Welcome to Super Knee!", emailHtml);
+    } catch (emailErr) {
+      console.error("Failed to send welcome email:", emailErr);
+    }
 
     res.status(201).json({
       message: "User registered successfully",

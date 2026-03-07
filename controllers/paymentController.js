@@ -1,6 +1,9 @@
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const Order = require("../models/Order");
+const User = require("../models/User"); // Added User import
+const { sendEmail } = require("../utils/emailUtils");
+const { orderConfirmationTemplate } = require("../utils/emailTemplates");
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_placeholder",
@@ -47,6 +50,17 @@ exports.createRazorpayOrder = async (req, res) => {
 
     await newOrder.save();
     console.log("DIAGNOSTIC: Order saved successfully:", newOrder._id);
+
+    // Send Order Confirmation Email
+    try {
+      const user = await User.findById(userId);
+      if (user) {
+        const emailHtml = orderConfirmationTemplate(user.name, newOrder);
+        await sendEmail(user.email, `Order Confirmation #${newOrder.razorpayOrderId}`, emailHtml);
+      }
+    } catch (emailErr) {
+      console.error("Failed to send order confirmation email:", emailErr);
+    }
 
     res.status(201).json({
       success: true,
