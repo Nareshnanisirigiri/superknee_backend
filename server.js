@@ -22,8 +22,21 @@ connectDB();
 ====================== */
 
 // CORS setup
+const allowedOrigins = [
+  "https://superkneewebsite.vercel.app", // production
+  "http://localhost:3000",               // local dev
+  "http://localhost:3001",
+  "http://localhost:3002",
+];
 const corsOptions = {
-  origin: "https://superkneewebsite.vercel.app", // your frontend URL
+  origin: function (origin, callback) {
+    // allow requests with no origin (e.g. curl, Postman)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
