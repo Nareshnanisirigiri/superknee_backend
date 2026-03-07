@@ -1,6 +1,6 @@
 const http = require("http");
 
-const BASE = "http://localhost:5000";
+const BASE = "https://superknee-backend.onrender.com";
 const TIMESTAMP = Date.now();
 const TEST_EMAIL = `testapi${TIMESTAMP}@superknee.com`;
 

@@ -25,6 +25,7 @@ connectDB();
 const allowedOrigins = [
   "https://superkneewebsite.vercel.app", // production
   "http://localhost:3000",               // local dev
+  "https://superknee-backend.onrender.com", // backend self-reference (if needed)
   "http://localhost:3001",
   "http://localhost:3002",
 ];
