@@ -3,7 +3,17 @@
  * Inspired by Doorstep Hub design
  */
 
-const welcomeTemplate = (userName) => `
+const welcomeTemplate = (userName, role) => {
+    const isAdmin = role === 'admin';
+    const title = isAdmin ? 'ADMIN ACCESS GRANTED' : 'WELCOME';
+    const introText = isAdmin 
+        ? `You have been registered as an <strong>Administrator</strong> for the Super Knee platform. You now have access to the dashboard to manage orders, products, and users.`
+        : `We are delighted to welcome you to the Super Knee family! Your account has been successfully created and you are now part of a community dedicated to better movement and recovery.`;
+    
+    const ctaText = isAdmin ? 'Access Admin Dashboard' : 'Visit Our Shop';
+    const ctaLink = isAdmin ? 'https://superkneewebsite.vercel.app/admin' : 'https://superkneewebsite.vercel.app/shop';
+
+    return `
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,16 +21,16 @@ const welcomeTemplate = (userName) => `
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f7f6; }
         .wrapper { width: 100%; padding: 40px 0; }
         .container { width: 100%; max-width: 700px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .header { padding: 40px; display: flex; justify-content: space-between; align-items: flex-start; border-top: 8px solid #005f5f; }
-        .title-section h1 { margin: 0; color: #005f5f; font-size: 28px; letter-spacing: 1px; }
+        .header { padding: 40px; display: flex; justify-content: space-between; align-items: flex-start; border-top: 8px solid ${isAdmin ? '#232f3e' : '#005f5f'}; }
+        .title-section h1 { margin: 0; color: ${isAdmin ? '#232f3e' : '#005f5f'}; font-size: 28px; letter-spacing: 1px; }
         .title-section p { margin: 5px 0 0; color: #777; font-size: 14px; }
         .logo-section { text-align: right; }
-        .logo-text { font-size: 32px; font-weight: 900; color: #005f5f; display: block; }
+        .logo-text { font-size: 32px; font-weight: 900; color: ${isAdmin ? '#232f3e' : '#005f5f'}; display: block; }
         .content { padding: 0 40px 40px; }
         .intro { margin-bottom: 30px; font-size: 18px; color: #111; }
-        .cta-box { background-color: #f8fbfa; border: 1px dashed #005f5f; padding: 30px; border-radius: 6px; text-align: center; }
-        .button { display: inline-block; padding: 15px 40px; background-color: #005f5f; color: #ffffff !important; text-decoration: none; border-radius: 4px; font-weight: bold; text-transform: uppercase; font-size: 14px; margin-top: 15px; transition: background 0.3s; }
-        .footer { background-color: #005f5f; color: #ffffff; padding: 30px 40px; font-size: 13px; }
+        .cta-box { background-color: #f8fbfa; border: 1px dashed ${isAdmin ? '#232f3e' : '#005f5f'}; padding: 30px; border-radius: 6px; text-align: center; }
+        .button { display: inline-block; padding: 15px 40px; background-color: ${isAdmin ? '#232f3e' : '#005f5f'}; color: #ffffff !important; text-decoration: none; border-radius: 4px; font-weight: bold; text-transform: uppercase; font-size: 14px; margin-top: 15px; transition: background 0.3s; }
+        .footer { background-color: ${isAdmin ? '#232f3e' : '#005f5f'}; color: #ffffff; padding: 30px 40px; font-size: 13px; }
         .footer a { color: #ffffff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.3); }
     </style>
 </head>
@@ -29,7 +39,7 @@ const welcomeTemplate = (userName) => `
         <div class="container">
             <div class="header">
                 <div class="title-section">
-                    <h1>WELCOME</h1>
+                    <h1>${title}</h1>
                     <p>Date: ${new Date().toLocaleDateString('en-GB')}</p>
                 </div>
                 <div class="logo-section">
@@ -38,11 +48,11 @@ const welcomeTemplate = (userName) => `
             </div>
             <div class="content">
                 <div class="intro"><strong>Hi ${userName},</strong></div>
-                <p>We are delighted to welcome you to the Super Knee family! Your account has been successfully created and you are now part of a community dedicated to better movement and recovery.</p>
+                <p>${introText}</p>
                 
                 <div class="cta-box">
-                    <p style="margin: 0; color: #005f5f; font-weight: bold;">Unlock your potential today.</p>
-                    <a href="https://superkneewebsite.vercel.app/shop" class="button">Visit Our Shop</a>
+                    <p style="margin: 0; color: ${isAdmin ? '#232f3e' : '#005f5f'}; font-weight: bold;">${isAdmin ? 'Your administrative portal is ready.' : 'Unlock your potential today.'}</p>
+                    <a href="${ctaLink}" class="button">${ctaText}</a>
                 </div>
 
                 <p style="margin-top: 30px; font-size: 14px; color: #666;">If you have any questions or need assistance, please don't hesitate to reach out to our support team.</p>
@@ -58,6 +68,7 @@ const welcomeTemplate = (userName) => `
 </body>
 </html>
 `;
+};
 
 const orderConfirmationTemplate = (userName, order) => {
     const date = new Date().toLocaleDateString('en-GB');

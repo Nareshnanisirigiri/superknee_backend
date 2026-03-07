@@ -35,7 +35,7 @@ exports.registerUser = async (req, res) => {
 
     // Send Welcome Email
     try {
-      const emailHtml = welcomeTemplate(user.name);
+      const emailHtml = welcomeTemplate(user.name, user.role);
       await sendEmail(user.email, "Welcome to Super Knee!", emailHtml);
     } catch (emailErr) {
       console.error("Failed to send welcome email:", emailErr);
