@@ -81,12 +81,14 @@ const orderConfirmationTemplate = (userName, order) => {
         .info-content { font-size: 13px; line-height: 1.4; color: #444; }
 
         .items-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .items-table th { background-color: #005f5f; color: white; text-align: left; padding: 12px 20px; font-size: 12px; text-transform: uppercase; font-weight: bold; }
-        .items-table td { padding: 15px 20px; border-bottom: 1px solid #eeeeee; font-size: 14px; }
-        .col-no { width: 40px; }
+        .items-table th { background-color: #005f5f; color: white; text-align: left; padding: 12px 20px; font-size: 11px; text-transform: uppercase; font-weight: bold; }
+        .items-table td { padding: 10px 20px; border-bottom: 1px solid #eeeeee; font-size: 13px; vertical-align: middle; }
+        .col-no { width: 30px; text-align: center; }
+        .col-img { width: 60px; text-align: center; }
+        .product-thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #eee; display: block; margin: 0 auto; }
         .col-qty { text-align: center; width: 60px; }
-        .col-price { text-align: right; width: 100px; }
-        .col-total { text-align: right; width: 100px; font-weight: bold; }
+        .col-price { text-align: right; width: 90px; }
+        .col-total { text-align: right; width: 90px; font-weight: bold; }
 
         .summary-section { display: flex; justify-content: flex-end; padding: 30px 40px 40px; }
         .summary-table { width: 250px; border-collapse: collapse; }
@@ -140,6 +142,7 @@ const orderConfirmationTemplate = (userName, order) => {
                 <thead>
                     <tr>
                         <th class="col-no">NO.</th>
+                        <th class="col-img">IMAGE</th>
                         <th>ITEM NAME</th>
                         <th class="col-qty">UNIT</th>
                         <th class="col-price">PRICE</th>
@@ -147,15 +150,24 @@ const orderConfirmationTemplate = (userName, order) => {
                     </tr>
                 </thead>
                 <tbody>
-                    ${order.items.map((item, index) => `
+                    ${order.items.map((item, index) => {
+                        // Fallback image if product image is missing
+                        const imageUrl = item.image || item.imageUrl || "https://superkneewebsite.vercel.app/static/media/product-box.jpeg";
+                        return `
                         <tr>
                             <td class="col-no">${index + 1}</td>
-                            <td>${item.name || "Super Knee Product"}</td>
+                            <td class="col-img">
+                                <img src="${imageUrl}" alt="Product" class="product-thumb">
+                            </td>
+                            <td>
+                                <strong>${item.name || "Super Knee Product"}</strong>
+                            </td>
                             <td class="col-qty">${item.quantity}</td>
                             <td class="col-price">₹${item.price.toFixed(2)}</td>
                             <td class="col-total">₹${(item.price * item.quantity).toFixed(2)}</td>
                         </tr>
-                    `).join('')}
+                        `;
+                    }).join('')}
                 </tbody>
             </table>
 
