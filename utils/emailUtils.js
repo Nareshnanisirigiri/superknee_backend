@@ -76,6 +76,7 @@ export const sendEmail = async (to, subject, html) => {
 // -----------------------
 
 // --- UPDATED CODE ---
+    console.log("DIAGNOSTIC: process.env.EMAIL_FROM =", process.env.EMAIL_FROM);
     const msg = {
       to,
       from: {
@@ -85,6 +86,7 @@ export const sendEmail = async (to, subject, html) => {
       subject,
       html
     };
+    console.log("DIAGNOSTIC: Sending email with msg.from =", JSON.stringify(msg.from));
 // -----------------------
 
     const response = await sgMail.send(msg);
