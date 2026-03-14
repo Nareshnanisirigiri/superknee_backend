@@ -1,34 +1,23 @@
 import { sendEmail } from "./emailUtils.js";
-import { getTemplate } from "./emailTemplates.js";
+import orderPlacedTmpl from "../templates/orderPlaced.js";
+import orderConfirmedTmpl from "../templates/orderConfirmed.js";
+import orderShippedTmpl from "../templates/orderShipped.js";
+import orderCancelledTmpl from "../templates/orderCancelled.js";
 
 export const orderConfirmationTemplate = (userName, order) => {
-  return getTemplate("orderConfirmation.html", {
-    userName: userName,
-    orderId: order.razorpayOrderId || order._id,
-    totalAmount: order.totalAmount,
-  });
+  return orderConfirmedTmpl(userName, order);
 };
 
 export const orderPlacedTemplate = (userName, order) => {
-  return getTemplate("orderPlaced.html", {
-    userName: userName,
-    orderId: order.razorpayOrderId || order._id,
-  });
+  return orderPlacedTmpl(userName, order);
 };
 
-export const orderShippedTemplate = (userName, order, trackingLink) => {
-  return getTemplate("orderShipped.html", {
-    userName: userName,
-    orderId: order.razorpayOrderId || order._id,
-    trackingLink: trackingLink
-  });
+export const orderShippedTemplate = (userName, order, trackingNumber) => {
+  return orderShippedTmpl(userName, order, trackingNumber);
 };
 
 export const orderCancelTemplate = (userName, order) => {
-  return getTemplate("orderCancel.html", {
-    userName: userName,
-    orderId: order.razorpayOrderId || order._id,
-  });
+  return orderCancelledTmpl(userName, order);
 };
 
 export const sendOrderConfirmationEmail = async (user, order) => {
