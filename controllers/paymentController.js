@@ -37,24 +37,29 @@ export const createRazorpayOrder = async (req, res) => {
       razorpayOrderId = "cod_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
       console.log("DIAGNOSTIC: Processing COD Order");
     } else {
+      // For Partial COD, we only charge a portion (e.g. ₹578) upfront
+      const chargeAmount = paymentMethod === "Partial COD" ? 578 : totalAmount;
+      finalAmount = chargeAmount * 100;
+
       const options = {
-        amount: totalAmount * 100, // Amount in paise
+        amount: finalAmount, // Amount in paise
         currency: "INR",
         receipt: `receipt_${Date.now()}`,
       };
 
-      razorpayOrderId = "test_order_" + Date.now();
+      razorpayOrderId = "test_order_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
 
       try {
         const razorpayOrder = await razorpay.orders.create(options);
         if (razorpayOrder) {
           razorpayOrderId = razorpayOrder.id;
           finalAmount = razorpayOrder.amount;
+          isTest = false; // Real Razorpay order
         }
       } catch (err) {
         console.warn("Razorpay Order Creation Failed (using fallback):", err.message);
+        isTest = true; // Fallback to simulated test order
       }
-      isTest = razorpayOrderId.startsWith("test_");
     }
 
     // Create our internal order record

@@ -29,7 +29,7 @@ const orderSchema = new mongoose.Schema({
   razorpaySignature: String,
   paymentMethod: {
     type: String,
-    enum: ["Online", "COD"],
+    enum: ["Online", "COD", "Partial COD"],
     default: "Online"
   },
   paymentStatus: {
